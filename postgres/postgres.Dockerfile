@@ -1,5 +1,5 @@
 FROM postgres:9.3
-LABEL maintainer="Ank"
+LABEL maintainer="Oleksandr Briukhanov"
 
 COPY ./init_postgresql.sh /docker-entrypoint-initdb.d/
 COPY ./postgresql.conf /opt/postgresql.conf

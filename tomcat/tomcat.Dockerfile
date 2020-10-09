@@ -1,5 +1,5 @@
 FROM alpine:3.9
-LABEL maintainer="Ank"
+LABEL maintainer="Oleksandr Briukhanov"
 
 ENV JAVA_HOME="/usr/lib/jvm/default-jvm"
 ENV MEM_OPTS="-Xmx2g -Xms1g"
@@ -20,7 +20,7 @@ RUN apk upgrade --update && \
     gunzip /tmp/apache-tomcat.tar.gz && \
     tar -C /opt -xf /tmp/apache-tomcat.tar && \
     ln -s /opt/apache-tomcat-${TOMCAT_VERSION} ${TOMCAT_HOME}
-    
+
 # RUN rm -rf ${TOMCAT_HOME}/webapps/* && \
 RUN apk del curl && \
     rm -rf /tmp/* /var/cache/apk/*

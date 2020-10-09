@@ -1,5 +1,5 @@
 FROM alpine:edge
-LABEL maintainer="Ank"
+LABEL maintainer="Oleksandr Briukhanov"
 
 ENV JAVA_HOME="/usr/lib/jvm/default-jvm"
 
