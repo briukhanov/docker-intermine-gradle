@@ -19,7 +19,7 @@ services:
       - MINE_NAME=${MINE_NAME:-biotestmine}
       - MINE_REPO_URL=${MINE_REPO_URL:-}
       - IM_DATA_DIR=${IM_DATA_DIR:-DATA_DIR}
-      - MEM_OPTS=${MEM_OPTS:-"-Xmx1500m -Xms750m"}
+      - MEM_OPTS=${MEM_OPTS:-"-Xmx2g -Xms1g"}
       - IM_REPO_URL=${IM_REPO_URL:-}
       - IM_REPO_BRANCH=${IM_REPO_BRANCH:-}
     depends_on:
@@ -54,7 +54,7 @@ services:
       context: ./tomcat
       dockerfile: ./tomcat.Dockerfile
     environment:
-      - MEM_OPTS=${MEM_OPTS:-"-Xmx900m -Xms450m"}
+      - MEM_OPTS=${MEM_OPTS:-"-Xmx1g -Xms500m"}
     ports:
       - ${TOMCAT_HOST_PORT:-9999}:${TOMCAT_PORT:-8080}
 

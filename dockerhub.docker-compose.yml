@@ -21,7 +21,7 @@ services:
       - IM_REPO_BRANCH=${IM_REPO_BRANCH:-}
     depends_on:
       - postgres
-      - solr
+      # - solr
       - tomcat
 
   postgres:
@@ -31,15 +31,15 @@ services:
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
 
-  solr:
-    container_name: intermine_solr
-    image: intermine/solr
-    environment:
-      - MEM_OPTS=${MEM_OPTS:-"-Xmx2g -Xms1g"}
-      - MINE_NAME=${MINE_NAME:-biotestmine}
-    user: ${UID:-1000}:${GID:-1000}
-    volumes:
-      - ./data/solr:/var/solr
+  # solr:
+  #   container_name: intermine_solr
+  #   image: intermine/solr
+  #   environment:
+  #     - MEM_OPTS=${MEM_OPTS:-"-Xmx2g -Xms1g"}
+  #     - MINE_NAME=${MINE_NAME:-biotestmine}
+  #   user: ${UID:-1000}:${GID:-1000}
+  #   volumes:
+  #     - ./data/solr:/var/solr
 
   tomcat:
     container_name: intermine_tomcat
