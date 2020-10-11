@@ -72,13 +72,14 @@ pipeline {
               steps {
 
                 sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} docker login -u ${env.DOC_HUB_USR} -p ${env.DOC_HUB_PSW} && \
-                    docker commit intermine_builder wibob/builder:${env.BUILD_NUMBER} && \
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} docker commit intermine_builder wibob/builder:${env.BUILD_NUMBER} && \
                     docker tag wibob/builder:${env.BUILD_NUMBER} wibob/builder:latest && \
                     docker commit intermine_postgres wibob/postgres:${env.BUILD_NUMBER} && \
                     docker tag wibob/postgres:${env.BUILD_NUMBER} wibob/postgres:latest && \
                     docker commit intermine_tomcat wibob/tomcat:${env.BUILD_NUMBER} && \
-                    docker tag wibob/tomcat:$(env.BUILD_NUMBER} wibob/tomcat:latest && \
+                    docker tag wibob/tomcat:$(env.BUILD_NUMBER} wibob/tomcat:latest"
+
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} docker login -u ${env.DOC_HUB_USR} -p ${env.DOC_HUB_PSW} && \
                     docker push wibob/builder && \
                     docker push wibob/postgres && \
                     docker push wibob/tomcat"
