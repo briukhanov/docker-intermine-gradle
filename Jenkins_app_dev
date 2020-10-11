@@ -63,9 +63,7 @@ pipeline {
               steps {
 
                 sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
-                    sh '''
-                    ssh -o StrictHostKeyChecking=no ubuntu@"${env.app_dns}" git clone https://github.com/briukhanov/docker-intermine-gradle.git
-                    '''
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} git clone https://github.com/briukhanov/docker-intermine-gradle.git"
                 }
               }
               }
