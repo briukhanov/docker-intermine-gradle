@@ -48,33 +48,21 @@ pipeline {
               }
           }
 
-          // stage('Install Perl Libs') {
-          //   steps { dir ('terraform') {
-          //     sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
-          //       sh '''
-          //       APP_DNS=`terraform output web_server_public_dns`
-          //       ssh -o StrictHostKeyChecking=no ubuntu@$APP_DNS "sudo ~/ansible/roles/build_dep/files/perl_lib.sh"
-          //       '''
-          //     }
-          //     }
-          //   }
-          // }
-        stage('Chckout Repo on app_instance') {
-              steps {
 
-                sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} git clone https://github.com/briukhanov/docker-intermine-gradle.git"
-                }
-              }
-              }
+        // stage('Chckout Repo on app_instance') {
+        //       steps {
+        //
+        //         sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
+        //             sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} git clone https://github.com/briukhanov/docker-intermine-gradle.git"
+        //         }
+        //       }
+        //       }
 
         stage('Build Docker Images') {
               steps {
                 script {
                 sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
-                    sh '''
-                    ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} "cd ~/docker-intermine-gradle && sudo docker-compose -f buil.docker-compose.yml build --parallel"
-                    '''
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} "cd ~/docker-intermine-gradle && sudo docker-compose -f buil.docker-compose.yml build --parallel""
                 }
               }
               }
@@ -84,8 +72,7 @@ pipeline {
               steps {
                 script {
                 sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
-                    sh '''
-                    ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} "docker login -u ${env.DOC_HUB_USR} -p ${env.DOC_HUB_PSW} && \
+                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} "docker login -u ${env.DOC_HUB_USR} -p ${env.DOC_HUB_PSW} && \
                     docker commit intermine_builder wibob/builder:$BUILD_NUMBER && \
                     docker tag wibob/builder:$BUILD_NUMBER wibob/builder:latest && \
                     docker commit intermine_postgres wibob/postgres:$BUILD_NUMBER && \
@@ -94,8 +81,7 @@ pipeline {
                     docker tag wwibob/tomcat:$BUILD_NUMBER wibob/tomcat:latest && \
                     docker push wibob/builder && \
                     docker push wibob/postgres && \
-                    docker push wibob/tomcat"
-                    '''
+                    docker push wibob/tomcat""
                 }
                 }
               }
