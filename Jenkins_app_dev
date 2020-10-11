@@ -1,0 +1,66 @@
+pipeline {
+
+  agent {
+    label "master"
+  }
+  options {
+       buildDiscarder(logRotator(numToKeepStr: '7', artifactNumToKeepStr: '7'))
+     }
+
+  environment {
+    AWS_CRED=credentials('AWS-pipeline')
+    AWS_ACCESS_KEY_ID = "${env.AWS_CRED_USR}"
+    AWS_SECRET_ACCESS_KEY = "${env.AWS_CRED_PSW}"
+  }
+
+  // parameters {
+  //             string(name: 'app_dns', defaultValue: '')
+  //           }
+  stages {
+        stage ('checkout infra git') {
+            steps {
+                    git url: 'https://github.com/briukhanov/epam_lab_final.git',
+                    // credentialsId: 'github-ssh-key',
+                    branch: 'master'
+
+            }
+        }
+
+        stage('Getting app address') {
+
+            steps { dir ('terraform') {
+                sh '''
+                terraform init -input=false
+                terraform workspace select dev
+                '''
+                script {
+                sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
+                  sh '''
+                  APP_DNS=`terraform output web_server_public_dns`
+                  ssh -o StrictHostKeyChecking=no ubuntu@$APP_DNS "ls"
+                  '''
+                }
+              }
+              }
+            }
+        }
+
+        stage('Build') {
+            steps {
+              sh '''
+              echo Build complete
+              '''
+            }
+        }
+        stage('Test') {
+            steps {
+              sh 'echo Test complete'
+            }
+        }
+        stage('Deploy') {
+            steps {
+              sh 'echo Deploy complete'
+            }
+        }
+      }
+    }
