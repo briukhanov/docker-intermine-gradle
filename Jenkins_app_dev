@@ -73,12 +73,12 @@ pipeline {
                 script {
                 sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
                     sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} "docker login -u ${env.DOC_HUB_USR} -p ${env.DOC_HUB_PSW} && \
-                    docker commit intermine_builder wibob/builder:$BUILD_NUMBER && \
-                    docker tag wibob/builder:$BUILD_NUMBER wibob/builder:latest && \
-                    docker commit intermine_postgres wibob/postgres:$BUILD_NUMBER && \
-                    docker tag wibob/postgres:$BUILD_NUMBER wibob/postgres:latest && \
-                    docker commit intermine_tomcat wibob/tomcat:$BUILD_NUMBER && \
-                    docker tag wwibob/tomcat:$BUILD_NUMBER wibob/tomcat:latest && \
+                    docker commit intermine_builder wibob/builder:${env.BUILD_NUMBER} && \
+                    docker tag wibob/builder:${env.BUILD_NUMBER} wibob/builder:latest && \
+                    docker commit intermine_postgres wibob/postgres:${env.BUILD_NUMBER} && \
+                    docker tag wibob/postgres:${env.BUILD_NUMBER} wibob/postgres:latest && \
+                    docker commit intermine_tomcat wibob/tomcat:${env.BUILD_NUMBER} && \
+                    docker tag wibob/tomcat:$(env.BUILD_NUMBER} wibob/tomcat:latest && \
                     docker push wibob/builder && \
                     docker push wibob/postgres && \
                     docker push wibob/tomcat""
