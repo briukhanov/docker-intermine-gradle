@@ -7,12 +7,12 @@ pipeline {
        buildDiscarder(logRotator(numToKeepStr: '7', artifactNumToKeepStr: '7'))
      }
 
-  // environment {
-  //   AWS_CRED=credentials('AWS-pipeline')
-  //   AWS_ACCESS_KEY_ID = "${env.AWS_CRED_USR}"
-  //   AWS_SECRET_ACCESS_KEY = "${env.AWS_CRED_PSW}"
-  //
-  // }
+  environment {
+    AWS_CRED=credentials('AWS-pipeline')
+    AWS_ACCESS_KEY_ID = "${env.AWS_CRED_USR}"
+    AWS_SECRET_ACCESS_KEY = "${env.AWS_CRED_PSW}"
+  
+  }
 
   parameters {
               string(name: 'app_dns', defaultValue: '')
