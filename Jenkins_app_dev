@@ -11,7 +11,7 @@ pipeline {
     AWS_CRED=credentials('AWS-pipeline')
     AWS_ACCESS_KEY_ID = "${env.AWS_CRED_USR}"
     AWS_SECRET_ACCESS_KEY = "${env.AWS_CRED_PSW}"
-  
+
   }
 
   parameters {
@@ -31,7 +31,7 @@ pipeline {
 
             steps { dir ('terraform') {
                 sh '''
-                terraform init -input=false
+                terraform init -input=false -force-copy
                 terraform workspace select dev
                 '''
                 script {
