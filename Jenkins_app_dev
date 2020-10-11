@@ -64,13 +64,12 @@ pipeline {
 
                 sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
                     sh '''
-                    echo ${env.app_dns}
                     ssh -o StrictHostKeyChecking=no ubuntu@$env.app_dns git clone https://github.com/briukhanov/docker-intermine-gradle.git'
                     '''
                 }
               }
               }
-        
+
         stage('Build Docker Images') {
               steps {
                 script {
