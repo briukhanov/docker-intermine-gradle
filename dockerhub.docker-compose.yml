@@ -2,7 +2,7 @@ version: "3"
 services:
   intermine_builder:
     container_name: intermine_builder
-    image: intermine/builder:latest
+    image: wibob/builder:latest
     user: 0:0
     volumes:
       # - ./data/mine/data:/home/intermine/intermine/data
@@ -26,7 +26,7 @@ services:
 
   postgres:
     container_name: intermine_postgres
-    image: intermine/postgres:latest
+    image: wibob/postgres:latest
     user: 0:0
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
@@ -43,11 +43,11 @@ services:
 
   tomcat:
     container_name: intermine_tomcat
-    image: intermine/tomcat
+    image: wibob/tomcat
     environment:
       - MEM_OPTS=${MEM_OPTS:-"-Xmx1g -Xms500m"}
     ports:
-      - ${TOMCAT_HOST_PORT:-9999}:${TOMCAT_PORT:-8080}
+      - ${TOMCAT_HOST_PORT:-8080}:${TOMCAT_PORT:-8080}
 
 # volumes:
 #   PostgresDBData:

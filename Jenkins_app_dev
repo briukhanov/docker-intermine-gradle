@@ -11,7 +11,7 @@ pipeline {
     AWS_CRED=credentials('AWS-pipeline')
     AWS_ACCESS_KEY_ID = "${env.AWS_CRED_USR}"
     AWS_SECRET_ACCESS_KEY = "${env.AWS_CRED_PSW}"
-
+    DOC_HUB=credentials('DockerHub-wibob')
   }
 
   parameters {
@@ -47,17 +47,42 @@ pipeline {
                 }
               }
           }
-
-        stage('Build Docker Images') {
-            steps {
-              echo "Build complete"
-              echo "${env.app_dns}"
-            }
+        stage('Chckout Repo on app_instance') {
+              steps {
+                sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
+                    sh'''
+                    ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} "git clone https://github.com/briukhanov/docker-intermine-gradle.git"
+                    '''
+                }
+              }
         }
-        stage('Test') {
-            steps {
-              sh 'echo Test complete'
-            }
+        stage('Build Docker Images') {
+              steps {
+                sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} "cd ~/docker-intermine-gradle && sudo docker-compose -f buil.docker-compose.yml build --parallel"
+                    '''
+                }
+              }
+        }
+
+        stage('Pushing to DockerHub') {
+              steps {
+                sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ubuntu@${env.app_dns} "docker login -u ${env.DOC_HUB_USR} -p ${env.DOC_HUB_PSW} && \
+                    docker commit intermine_builder wibob/builder:$BUILD_NUMBER && \
+                    docker tag wibob/builder:$BUILD_NUMBER wibob/builder:latest && \
+                    docker commit intermine_postgres wibob/postgres:$BUILD_NUMBER && \
+                    docker tag wibob/postgres:$BUILD_NUMBER wibob/postgres:latest && \
+                    docker commit intermine_tomcat wibob/tomcat:$BUILD_NUMBER && \
+                    docker tag wwibob/tomcat:$BUILD_NUMBER wibob/tomcat:latest && \
+                    docker push wibob/builder && \
+                    docker push wibob/postgres && \
+                    docker push wibob/tomcat"
+                    '''
+                }
+              }
         }
         stage('Deploy') {
             steps {
