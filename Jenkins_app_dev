@@ -50,7 +50,7 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-              echo Build complete
+              echo "Build complete"
               echo "${env.app_dns}"
             }
         }
