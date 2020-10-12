@@ -12,7 +12,7 @@ pipeline {
     AWS_ACCESS_KEY_ID = "${env.AWS_CRED_USR}"
     AWS_SECRET_ACCESS_KEY = "${env.AWS_CRED_PSW}"
     DOC_HUB=credentials('DockerHub-wibob')
-    app_dns=''
+    app_dns='default'
   }
 
   // parameters {
@@ -38,7 +38,8 @@ pipeline {
                 script {
                 sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
                   tmp_param =  sh (script: 'terraform output web_server_public_dns', returnStdout: true).trim()
-                  env.app_dns = tmp_param
+                  app_dns = tmp_param
+                  env.app_dns = app_dns
                   // sh '''
                   // APP_DNS=`terraform output web_server_public_dns`
                   // ssh -o StrictHostKeyChecking=no ubuntu@$APP_DNS "ls"
@@ -46,6 +47,13 @@ pipeline {
                 }
                 }
                 }
+              }
+          }
+
+          stage('Var Test') {
+              steps {
+                sh "echo ${app_dns}"
+                sh "echo ${env.app_dns}"
               }
           }
 
