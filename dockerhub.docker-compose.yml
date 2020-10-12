@@ -43,7 +43,7 @@ services:
 
   tomcat:
     container_name: intermine_tomcat
-    image: wibob/tomcat
+    image: wibob/tomcat:latest
     environment:
       - MEM_OPTS=${MEM_OPTS:-"-Xmx1g -Xms500m"}
     ports:
