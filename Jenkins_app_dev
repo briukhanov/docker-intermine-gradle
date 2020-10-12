@@ -12,11 +12,12 @@ pipeline {
     AWS_ACCESS_KEY_ID = "${env.AWS_CRED_USR}"
     AWS_SECRET_ACCESS_KEY = "${env.AWS_CRED_PSW}"
     DOC_HUB=credentials('DockerHub-wibob')
+    app_dns=''
   }
 
-  parameters {
-              string(name: 'app_dns', defaultValue: '12')
-            }
+  // parameters {
+  //             string(name: 'app_dns', defaultValue: '12')
+  //           }
   stages {
         stage ('checkout infra git') {
             steps {
