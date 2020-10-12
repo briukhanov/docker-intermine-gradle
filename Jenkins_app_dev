@@ -29,7 +29,7 @@ pipeline {
         }
 
         stage('Getting app address') {
-
+ 
             steps { dir ('terraform') {
                 sh '''
                 terraform init -force-copy
