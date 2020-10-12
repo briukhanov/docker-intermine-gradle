@@ -59,7 +59,10 @@ pipeline {
               steps {
 
                 sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} git clone https://github.com/briukhanov/docker-intermine-gradle.git"
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "git init && git remote add origin https://github.com/briukhanov/docker-intermine-gradle.git && git fetch origin && git checkout -b master --track origin/master"
+                    """
+                    // git clone https://github.com/briukhanov/docker-intermine-gradle.git"
                 }
               }
               }
