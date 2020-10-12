@@ -106,7 +106,7 @@ pipeline {
 
                 sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "cd docker-intermine-gradle && sudo docker-compose -f dockerhub.docker-compose.yml up"
+                      ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "cd docker-intermine-gradle && wget --no-check-certificate --no-proxy 'http://biotestmine.s3.amazonaws.com/data.zip' && unzip data.zip && rm data.zip sudo docker-compose -f dockerhub.docker-compose.yml up"
                     """
                 }
 
