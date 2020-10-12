@@ -94,10 +94,18 @@ pipeline {
         //
         //       }
         // }
-        stage('Deploy') {
-            steps {
-              sh 'echo Deploy complete'
-            }
-        }
+        // stage('Deploy') {
+        //       steps {
+        //
+        //         sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
+        //             sh """
+        //             ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "cd ~/docker-intermine-gradle && sudo docker-compose -f dockerhub.docker-compose.yml up"
+        //             """
+        //         }
+        //
+        //       }
+        // }
+
+
       }
     }

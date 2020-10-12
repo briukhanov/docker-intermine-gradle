@@ -58,13 +58,13 @@ pipeline {
               }
 
 
-        stage('Deploy From Last Dev Build') {
+        stage('Build And Deploy From Repo') {
               steps {
 
                 sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
                     sh """
                     echo "Deploy Complete"
-                    // ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "cd ~/docker-intermine-gradle && sudo docker-compose -f dockerhub.docker-compose.yml up"
+                    // ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "cd ~/docker-intermine-gradle && sudo docker-compose -f build.docker-compose.yml up --build --force-recreate"
                     """
                 }
 
