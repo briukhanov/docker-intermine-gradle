@@ -3,7 +3,8 @@ services:
   intermine_builder:
     container_name: intermine_builder
     image: intermine/builder:latest
-    user: ${UID:-1000}:${GID:-1000}
+    user: 0:0
+      # ${UID:-1000}:${GID:-1000}
     volumes:
       # - ./data/mine/data:/home/intermine/intermine/data
       - ./data/mine/dump:/home/intermine/intermine/dump
@@ -27,7 +28,8 @@ services:
   postgres:
     container_name: intermine_postgres
     image: intermine/postgres:latest
-    user: ${UID:-1000}:${GID:-1000}
+    user: 0:0
+      ${UID:-1000}:${GID:-1000}
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
 
@@ -47,7 +49,7 @@ services:
     environment:
       - MEM_OPTS=${MEM_OPTS:-"-Xmx1g -Xms500m"}
     ports:
-      - ${TOMCAT_HOST_PORT:-9999}:${TOMCAT_PORT:-8080}
+      - ${TOMCAT_HOST_PORT:-8080}:${TOMCAT_PORT:-8080}
 
 # volumes:
 #   PostgresDBData:
