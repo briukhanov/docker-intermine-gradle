@@ -32,7 +32,7 @@ pipeline {
 
             steps { dir ('terraform') {
                 sh '''
-                terraform init
+                terraform init -force-copy
                 terraform workspace select dev
                 '''
                 script {
@@ -59,17 +59,17 @@ pipeline {
               }
               }
 
-        stage('Build Docker Images') {
-              steps {
-
-                sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
-                    sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "cd docker-intermine-gradle && ls -l && sudo docker-compose -f build.docker-compose.yml build"
-                    """
-                }
-
-              }
-        }
+        // stage('Build Docker Images') {
+        //       steps {
+        //
+        //         sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
+        //             sh """
+        //             ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "cd docker-intermine-gradle && ls -l && sudo docker-compose -f build.docker-compose.yml build"
+        //             """
+        //         }
+        //
+        //       }
+        // }
 
         // stage('Pushing to DockerHub') {
         //       steps {
@@ -101,6 +101,16 @@ pipeline {
         //       }
         // }
 
+        stage('Deploy Docker Images') {
+              steps {
 
+                sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "cd docker-intermine-gradle && sudo docker-compose -f dockerhub.docker-compose.yml up"
+                    """
+                }
+
+              }
+        }
       }
     }

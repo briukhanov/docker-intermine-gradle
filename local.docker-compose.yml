@@ -2,7 +2,9 @@ version: "3"
 services:
   intermine_builder:
     container_name: intermine_builder
-    image: intermine/builder:latest
+    build:
+      context: ./intermine_builder
+      dockerfile: ./intermine_builder.Dockerfile
     user: ${UID:-1000}:${GID:-1000}
     volumes:
       # - ./data/mine/data:/home/intermine/intermine/data
@@ -26,14 +28,18 @@ services:
 
   postgres:
     container_name: intermine_postgres
-    image: intermine/postgres:latest
+    build:
+      context: ./postgres
+      dockerfile: ./postgres.Dockerfile
     user: ${UID:-1000}:${GID:-1000}
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
 
   # solr:
   #   container_name: intermine_solr
-  #   image: intermine/solr
+  #   build:
+  #     context: ./solr
+  #     dockerfile: ./solr.Dockerfile
   #   environment:
   #     - MEM_OPTS=${MEM_OPTS:-"-Xmx2g -Xms1g"}
   #     - MINE_NAME=${MINE_NAME:-biotestmine}
@@ -43,7 +49,9 @@ services:
 
   tomcat:
     container_name: intermine_tomcat
-    image: intermine/tomcat
+    build:
+      context: ./tomcat
+      dockerfile: ./tomcat.Dockerfile
     environment:
       - MEM_OPTS=${MEM_OPTS:-"-Xmx1g -Xms500m"}
     ports:

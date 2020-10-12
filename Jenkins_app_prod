@@ -30,7 +30,7 @@ pipeline {
 
             steps { dir ('terraform') {
                 sh '''
-                terraform init -input=false -force-copy
+                terraform init -force-copy
                 terraform workspace select prod
                 '''
                 script {
@@ -45,30 +45,28 @@ pipeline {
               }
           }
 
+          stage('Chckout Repo on app_instance') {
+                steps {
 
-
-
-        stage('Chckout Repo on app_instance') {
-              steps {
-
-                sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
-                    sh "ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} git clone https://github.com/briukhanov/docker-intermine-gradle.git"
+                  sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
+                      sh """
+                      ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "rm -rf docker-intermine-gradle && git clone https://github.com/briukhanov/docker-intermine-gradle.git"
+                      """
+                  }
                 }
-              }
-              }
+          }
 
 
-        stage('Deploy From Last Dev Build') {
-              steps {
+          stage('Deploy Docker Images') {
+                steps {
 
-                sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
-                    sh """
-                    echo "Deploy Complete"
-                    // ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "cd ~/docker-intermine-gradle && sudo docker-compose -f dockerhub.docker-compose.yml up"
-                    """
+                  sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
+                      sh """
+                      ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "cd docker-intermine-gradle && sudo docker-compose -f dockerhub.docker-compose.yml up"
+                      """
+                  }
+
                 }
-
-              }
-        }
+          }
       }
     }
