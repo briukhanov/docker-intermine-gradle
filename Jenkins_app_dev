@@ -47,22 +47,14 @@ pipeline {
               }
           }
 
-          stage('Var Test') {
-              steps {
-                sh "echo ${app_dns}"
-
-              }
-          }
-
-
         stage('Chckout Repo on app_instance') {
               steps {
 
                 sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "git init && git remote add origin https://github.com/briukhanov/docker-intermine-gradle.git && git fetch origin && git checkout -b master --track origin/master"
+                    ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "rm -rf docker-intermine-gradle && git clone https://github.com/briukhanov/docker-intermine-gradle.git"
                     """
-                    // git clone https://github.com/briukhanov/docker-intermine-gradle.git"
+
                 }
               }
               }
