@@ -72,7 +72,7 @@ pipeline {
 
                 sshagent(credentials : ['wibob-Frankfurt-ubuntu']) {
                     sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "cd docker-intermine-gradle && ls -l && sudo docker-compose -f buil.docker-compose.yml build --parallel"
+                    ssh -o StrictHostKeyChecking=no ubuntu@${app_dns} "cd docker-intermine-gradle && ls -l && sudo docker-compose -f build.docker-compose.yml build --parallel"
                     """
                 }
 
