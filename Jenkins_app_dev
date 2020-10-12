@@ -32,7 +32,7 @@ pipeline {
 
             steps { dir ('terraform') {
                 sh '''
-                terraform init -input=false -force-copy
+                terraform init 
                 terraform workspace select dev
                 '''
                 script {
